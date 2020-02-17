@@ -1,0 +1,93 @@
+---
+title: 'STAT 140: Homework 2'
+author: "R Solutions"
+date: ""
+output: pdf_document
+---
+
+## EXPLORING ggplot2
+
+#### For the following exercises, you will be exploring a dataset collected on the game Pokemon Go. As noted in the \href{https://www.openintro.org/stat/data/?data=pokemon}{dataset description} on OpenIntro, "A key part of Pokémon Go is using evolutions to get stronger Pokemon, and a deeper understanding of evolutions is key to being the greatest Pokemon Go player of all time. This data set covers 75 Pokemon evolutions spread across four species. A wide set of variables are provided, allowing a deeper dive into what characteristics are important in predicting a Pokemon's final combat power (CP)." 
+
+```{r pokemon go setup, message=FALSE}
+library(ggplot2)
+## source pokemon go data from OpenIntro website
+source("http://www.openintro.org/stat/data/pokemon.R")
+```
+
+The book \href{"https://r4ds.had.co.nz/"}{R for Data Science} can be a great resource for you as you learn more about what we can do in R. While a lot of it is advanced, it does have great examples for data visualizations. Open the PDF of the book in your browser. For this exercise, you will use the table of contents: Click on **3. Data Visualization** and then on **3.8 Position Adjustments**. Using the pokemon data, and specifically the variables `attack_weak_type` and `attack_weak_type_new`, generate the same bar plots that were generated for the diamonds data set in the book example. You should make 7 plots in total (I have already included the R chunks for your convenience). Pay attention to the subtle differences in the code that let you change how these plots look.
+
+- For these first two plots, choose either of the two variables to depict in your bar chart. What is the difference between these two plots? What piece of the code accomplished this change?
+
+  **Answer:** \textcolor{red}{In the first plot we specify colour=attack\_weak\_type; this gives us the color outline around the bars. In the second we specify fill=attack\_weak\_type; this gives us the filled color in the bars. }
+
+```{r bar chart color outline, fig.cap="R Exercise Plot 1", out.width = '50%', fig.align='center', tidy=TRUE}
+bc <- (ggplot(data = pokemon) 
+       + geom_bar(mapping = aes(x = attack_weak_type, colour = attack_weak_type))
+       + theme_bw()
+       + xlab("Weak Attack Type"))
+bc
+```
+
+```{r bar chart color fill, fig.cap="R Exercise Plot 2", out.width = '50%', fig.align='center', tidy=TRUE}
+bc <- (ggplot(data = pokemon) 
+       + geom_bar(mapping = aes(x = attack_weak_type, fill = attack_weak_type))
+       + theme_bw()
+       + xlab("Weak Attack Type"))
+bc
+```
+
+- For the rest of the plots, you will be using both variables. Identify the plots that we have studied in class. What are the differences among these five plots? What pieces of code accomplished these changes?
+
+  **Answer:** \textcolor{red}{Within aes() within geom\_bar: color vs fill; alpha}
+
+```{r stacked bar chart, fig.cap="R Exercise Plot 3", out.width = '50%', fig.align='center', tidy=TRUE}
+bc <- (ggplot(data=pokemon)
+       + geom_bar(mapping=aes(x=attack_weak_type, fill=attack_weak_type_new))
+       + theme_bw()
+       + xlab("Weak Attack Type")
+       + ylab("Count"))
+bc
+```
+
+```{r stacked bar chart translucent, fig.cap="R Exercise Plot 4", out.width = '50%', fig.align='center', tidy=TRUE}
+bc <- (ggplot(data=pokemon)
+       + geom_bar(mapping=aes(x=attack_weak_type, fill=attack_weak_type_new),
+                  alpha= 1/5, position="identity")
+       + theme_bw()
+       + xlab("Weak Attack Type")
+       + ylab("Count"))
+bc
+```
+
+```{r stacked bar chart no fill, fig.cap="R Exercise Plot 5", out.width = '50%', fig.align='center', tidy=TRUE}
+bc <- (ggplot(data=pokemon)
+       + geom_bar(mapping=aes(x=attack_weak_type, color=attack_weak_type_new),
+                  fill=NA, position="identity")
+       + theme_bw()
+       + xlab("Weak Attack Type")
+       + ylab("Count"))
+bc
+```
+
+- Based on the last three plots you generated, what is the default argument for position?
+
+  **Answer:** \textcolor{red}{Default is `identity' - wasn't specified in Plot 3, but the position was the same for Plot 4 and Plot 5 where we specified Position=`identity'.}
+
+```{r standardized stacked bar chart, fig.cap="R Exercise Plot 6", out.width = '50%', fig.align='center', tidy=TRUE}
+bc <- (ggplot(data=pokemon)
+       + geom_bar(mapping=aes(x=attack_weak_type, fill=attack_weak_type_new), position="fill")
+       + theme_bw()
+       + xlab("Weak Attack Type")
+       + ylab("Count"))
+bc
+```
+
+```{r side-by-side bar chart, fig.cap="R Exercise Plot 7", out.width = '50%', fig.align='center', tidy=TRUE}
+bc <- (ggplot(data=pokemon)
+       + geom_bar(mapping=aes(x=attack_weak_type, fill=attack_weak_type_new), position="dodge")
+       + theme_bw()
+       + xlab("Weak Attack Type")
+       + ylab("Count"))
+bc
+```
